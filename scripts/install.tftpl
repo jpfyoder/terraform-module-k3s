@@ -1,0 +1,37 @@
+curl -sfL https://get.k3s.io |
+  %{if k3s_version != null}
+  INSTALL_K3S_VERSION='${k3s_version}'
+  %{endif}
+sh -s -
+  %{if role == "server" || role == "bootstrap"}
+  server
+  %{if fixed_registration_host != null}
+  --tls-san "${fixed_registration_host}"
+  %{endif}
+  %{if datastore_endpoint != null}
+  --datastore-endpoint "${datastore_endpoint}"
+  %{endif}
+  %{else}
+  agent
+  %{if fixed_registration_host != null}
+  --server "https://${fixed_registration_host}:6443"
+  %{else}
+  --server "https://${bootstrap_host}:6443"
+  %{endif}
+  %{endif}
+
+  %{if role != "bootstrap"}
+  --token-file /var/lib/rancher/k3s/server/token
+  %{else}
+  %{if enable_embedded_etcd == true}
+  --cluster-init
+  %{endif}
+  %{endif}
+
+  %{if role == "server" && enable_embedded_etcd == true}
+  --server "https://${bootstrap_host}:6443"
+  %{endif}
+
+  %{for a in additional_k3s_args}
+  ${a}
+  %{endfor}

@@ -1,0 +1,75 @@
+{
+    "branches": [
+        "main"
+    ],
+    "plugins": [
+        [
+            "@semantic-release/commit-analyzer",
+            {
+                "preset": "angular",
+                "releaseRules": [
+                    {
+                        "message": "*",
+                        "release": "patch"
+                    },
+                    {
+                        "message": "feat:*",
+                        "release": "minor"
+                    },
+                    {
+                        "message": "BREAKING CHANGE:*",
+                        "release": "major"
+                    },
+                    {
+                        "message": "feat!*",
+                        "release": "major"
+                    }
+                ]
+            }
+        ],
+        [
+            "@semantic-release/release-notes-generator",
+            {
+                "preset": "conventionalcommits",
+                "presetConfig": {
+                    "header": "CHANGELOG",
+                    "types": [
+                        {
+                            "type": "feat",
+                            "section": "Features"
+                        },
+                        {
+                            "type": "BREAKING CHANGE",
+                            "section": "Breaking Changes"
+                        },
+                        {
+                            "type": "feat!",
+                            "section": "Breaking Changes"
+                        },
+                        {
+                            "type": "fix",
+                            "section": "Bug Fixes"
+                        },
+                        {
+                            "type": "perf",
+                            "section": "Performance Improvements"
+                        },
+                        {
+                            "type": "test",
+                            "section": "Tests"
+                        },
+                        {
+                            "type": "build",
+                            "section": "Build System"
+                        },
+                        {
+                            "type": "ci",
+                            "section": "CI/CD"
+                        }
+                    ]
+                }
+            }
+        ],
+        "@semantic-release/github"
+    ]
+}
