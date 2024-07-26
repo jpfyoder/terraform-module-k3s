@@ -214,7 +214,7 @@ resource "null_resource" "k3s_label" {
     when = destroy
     inline = [
       "#!/bin/bash",
-      "sudo k3s kubectl label nodes ${self.triggers.name} ${self.triggers.label}-",
+      "sudo k3s kubectl label nodes ${self.triggers.name} ${split("=", self.triggers.label)[0]}-",
     ]
   }
 
@@ -255,7 +255,7 @@ resource "null_resource" "k3s_taint" {
   provisioner "remote-exec" {
     when = destroy
     inline = [
-      "sudo k3s kubectl taint nodes ${self.triggers.name} ${self.triggers.taint}-",
+      "sudo k3s kubectl taint nodes ${self.triggers.name} ${split("=", self.triggers.taint)[0]}-",
     ]
   }
 
