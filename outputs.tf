@@ -1,1 +1,0 @@
-# TODO: Provide kubeconfig output
