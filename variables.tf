@@ -6,6 +6,7 @@ variable "nodes" {
     host = string
     user = string
     # Optional
+    internal_address     = optional(string, null)
     k3s_version          = optional(string, null)
     labels               = optional(list(string), [])
     taints               = optional(list(string), [])

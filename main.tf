@@ -14,7 +14,7 @@ locals {
     for name, node in var.nodes : name => {
       # Meta
       name           = name
-      bootstrap_host = local.bootstrap_server.host
+      bootstrap_host = coalesce(local.bootstrap_server.internal_address, local.bootstrap_server.host)
       # Required
       role = node.role
       host = node.host
@@ -25,6 +25,7 @@ locals {
       enable_embedded_etcd    = var.enable_embedded_etcd
       flannel_backend         = var.flannel_backend
       # Optional
+      internal_address     = node.internal_address
       k3s_version          = try(coalesce(node.k3s_version, var.k3s_version), null)
       labels               = concat(var.labels, node.labels)
       taints               = concat(var.taints, node.taints)
