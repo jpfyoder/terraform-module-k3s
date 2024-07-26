@@ -44,7 +44,7 @@ sh -s -
 
   # Wireguard-Native agent configuration
   %{if flannel_backend == "wireguard-native"}
-  --flannel-external-ip "${host}"
+  --node-external-ip "${host}"
   %{endif}
   %{endif}
 

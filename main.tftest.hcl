@@ -144,12 +144,12 @@ run "external_postgres_wireguard_flannel" {
   }
 
   assert {
-    condition = null_resource.k3s_node["c"].triggers.install_command == "curl -sfL https://get.k3s.io | K3S_NODE_NAME='c' sh -s - agent --server \"https://a.example.com:6443\" --flannel-external-ip \"c.example.com\" --token-file /var/lib/rancher/k3s/server/token"
+    condition = null_resource.k3s_node["c"].triggers.install_command == "curl -sfL https://get.k3s.io | K3S_NODE_NAME='c' sh -s - agent --server \"https://a.example.com:6443\" --node-external-ip \"c.example.com\" --token-file /var/lib/rancher/k3s/server/token"
     error_message   = "Server c is misconfigured"
   }
 
   assert {
-    condition = null_resource.k3s_node["d"].triggers.install_command == "curl -sfL https://get.k3s.io | K3S_NODE_NAME='d' sh -s - agent --server \"https://a.example.com:6443\" --flannel-external-ip \"d.example.com\" --token-file /var/lib/rancher/k3s/server/token"
+    condition = null_resource.k3s_node["d"].triggers.install_command == "curl -sfL https://get.k3s.io | K3S_NODE_NAME='d' sh -s - agent --server \"https://a.example.com:6443\" --node-external-ip \"d.example.com\" --token-file /var/lib/rancher/k3s/server/token"
     error_message   = "Server d is misconfigured"
   }
 }
