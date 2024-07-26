@@ -15,6 +15,17 @@ sh -s -
   --tls-san "${fixed_registration_host}"
   %{endif}
 
+  # Flannel network configuration
+  %{if flannel_backend != null}
+  --flannel-backend "${flannel_backend}"
+  %{endif}
+
+  # Wireguard-Native network configuration
+  %{if flannel_backend == "wireguard-native"}
+  --node-external-ip "${host}"
+  --flannel-external-ip
+  %{endif}
+
   # Set up datastore endpoint (external databases)
   %{if datastore_endpoint != null}
   --datastore-endpoint "${datastore_endpoint}"
@@ -22,12 +33,18 @@ sh -s -
   # Otherwise, we are an agent
   %{else}
   agent
+
   # Fixed registration host on agent side
   %{if fixed_registration_host != null}
   --server "https://${fixed_registration_host}:6443"
   # Otherwise, just use the bootstrap host's IP or local IP to register
   %{else}
   --server "https://${bootstrap_host}:6443"
+  %{endif}
+
+  # Wireguard-Native agent configuration
+  %{if flannel_backend == "wireguard-native"}
+  --flannel-external-ip "${host}"
   %{endif}
   %{endif}
 
