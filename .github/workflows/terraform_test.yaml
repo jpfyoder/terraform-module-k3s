@@ -1,0 +1,16 @@
+name: terraform test
+
+on: [push]
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+
+      - name: Terraform Test
+        uses: dflook/terraform-test@v1
+        with:
+          terraform_version: 1.6.0
