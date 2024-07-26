@@ -22,7 +22,7 @@ variable "nodes" {
   }
 
   validation {
-    condition     = anytrue([for name, node in var.nodes : node.role == "bootstrap"])
+    condition     = anytrue([for name, node in var.nodes : node.role == "bootstrap"]) || length(var.nodes) == 0
     error_message = "At least one node must be defined with the role 'bootstrap'."
   }
 }
