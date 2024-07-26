@@ -25,3 +25,8 @@ repos:
         args:
           - "--args=--fix"
           - "--hook-config=--tf-path=tofu"
+-   repo: https://github.com/terraform-docs/terraform-docs
+    rev: v0.18.0
+    hooks:
+      - id: terraform-docs-go
+        args: ["markdown", "table", "--output-file", "README.md", "--output-mode", "inject", "."]
