@@ -1,0 +1,16 @@
+name: tofu test
+
+on: [push]
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+
+      - name: OpenTofu Tests
+        uses: dflook/tofu-test@v1
+        with:
+          tofu_version: 1.7.0

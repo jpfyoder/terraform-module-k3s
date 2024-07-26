@@ -84,11 +84,11 @@ variable "enable_embedded_etcd" {
 
 variable "flannel_backend" {
   type        = string
-  default     = "vxlan"
-  description = "Flannel backend to use. Can be 'none', 'vxlan', 'host-gw', or 'wireguard-native'."
+  default     = null
+  description = "Flannel backend to use. Can be 'none', 'vxlan', 'host-gw', or 'wireguard-native'. Defaults to 'vxlan'."
 
   validation {
-    condition     = var.flannel_backend == "none" || var.flannel_backend == "vxlan" || var.flannel_backend == "host-gw" || var.flannel_backend == "wireguard-native"
+    condition     = var.flannel_backend == "none" || var.flannel_backend == "vxlan" || var.flannel_backend == "host-gw" || var.flannel_backend == "wireguard-native" || var.flannel_backend == null
     error_message = "Flannel backend must be one of 'none', 'vxlan', 'host-gw', or 'wireguard-native'."
   }
 }
