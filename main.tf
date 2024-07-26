@@ -33,13 +33,17 @@ locals {
     }
   }
 
-  install_command = {
-    for name, node in local.nodes : name => join(" ", compact([for x in split("\n", templatefile("${path.module}/scripts/install.tftpl", node)) : trimspace(x)]))
-  }
+  install_command = length(local.nodes) > 0 ? {
+    for name, node in local.nodes : name => join(" ", compact([
+      for x in split("\n",
+        templatefile("${path.module}/scripts/install.tftpl.sh", node)
+      ) : trimspace(split("#", x)[0])
+    ]))
+  } : {}
 
-  bootstrap_server = [
+  bootstrap_server = length(var.nodes) > 0 ? [
     for node in var.nodes : node if node.role == "bootstrap"
-  ][0]
+  ][0] : null
 }
 
 # Represents the first server in the cluster
@@ -69,6 +73,13 @@ resource "null_resource" "k3s_bootstrap_server" {
   }
 
   provisioner "remote-exec" {
+    connection {
+      type        = "ssh"
+      user        = self.triggers.user
+      private_key = self.triggers.private_key
+      host        = self.triggers.host
+    }
+
     when = destroy
     inline = self.triggers.uninstall_on_destroy == "true" ? [
       "/usr/local/bin/k3s-uninstall.sh"
@@ -87,19 +98,44 @@ resource "null_resource" "k3s_key_distribution" {
     user        = local.bootstrap_server.user
     private_key = var.ssh_private_key
     host        = local.bootstrap_server.host
-  }
 
-  connection {
-    type        = "ssh"
-    user        = self.triggers.user
-    private_key = self.triggers.private_key
-    host        = self.triggers.host
+    node_user = each.value.user
+    node_host = each.value.host
   }
-
 
   provisioner "remote-exec" {
-    when   = create
-    inline = ["echo hello"]
+    connection {
+      type        = "ssh"
+      user        = self.triggers.user
+      private_key = self.triggers.private_key
+      host        = self.triggers.host
+    }
+
+    when = create
+    inline = [
+      "#!/bin/bash",
+      "sudo -i bash -c 'while : ; do [[ -f \"/var/lib/rancher/k3s/server/token\" ]] && break; echo \"Pausing until file exists.\"; sleep 1; done'",
+      "echo \"${self.triggers.private_key}\" > k3s.pem",
+      "chmod 400 k3s.pem",
+      "scp -i k3s.pem -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /var/lib/rancher/k3s/server/token ${self.triggers.node_user}@${self.triggers.node_host}:~/token",
+      "ssh -i k3s.pem -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${self.triggers.node_user}@${self.triggers.node_host} 'sudo mkdir -p /var/lib/rancher/k3s/server && sudo mv ~/token /var/lib/rancher/k3s/server/token'",
+      "rm -f k3s.pem",
+    ]
+  }
+
+  provisioner "remote-exec" {
+    connection {
+      type        = "ssh"
+      user        = self.triggers.node_user
+      private_key = self.triggers.private_key
+      host        = self.triggers.node_host
+    }
+
+    when = destroy
+    inline = [
+      "#!/bin/bash",
+      "sudo rm -f /var/lib/rancher/k3s/server/token",
+    ]
   }
 
   depends_on = [null_resource.k3s_bootstrap_server]
@@ -165,7 +201,6 @@ resource "null_resource" "k3s_label" {
     private_key = self.triggers.private_key
     host        = self.triggers.host
   }
-
 
   provisioner "remote-exec" {
     when = create
