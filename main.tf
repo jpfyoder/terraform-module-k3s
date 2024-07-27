@@ -118,7 +118,7 @@ resource "null_resource" "k3s_key_distribution" {
       "sudo -i bash -c 'while : ; do [[ -f \"/var/lib/rancher/k3s/server/token\" ]] && break; echo \"Pausing until file exists.\"; sleep 1; done'",
       "echo \"${self.triggers.private_key}\" > k3s.pem",
       "chmod 400 k3s.pem",
-      "scp -i k3s.pem -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /var/lib/rancher/k3s/server/token ${self.triggers.node_user}@${self.triggers.node_host}:~/token",
+      "sudo scp -i k3s.pem -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /var/lib/rancher/k3s/server/token ${self.triggers.node_user}@${self.triggers.node_host}:~/token",
       "ssh -i k3s.pem -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${self.triggers.node_user}@${self.triggers.node_host} 'sudo mkdir -p /var/lib/rancher/k3s/server && sudo mv ~/token /var/lib/rancher/k3s/server/token'",
       "rm -f k3s.pem",
     ]

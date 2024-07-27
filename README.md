@@ -30,7 +30,9 @@ To connect to the cluster, you must retrieve the Kubeconfig via connecting to a 
 
 ## Things that are Not Implemented
 
-- [ ]
+- Automatic getting of Kubeconfig file from the created cluster
+- Better key distribution, and providing k3s keys as outputs
+- Support cluster certificate rotation
 
 # Terraform Docs
 
