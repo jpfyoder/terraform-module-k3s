@@ -207,7 +207,7 @@ resource "null_resource" "k3s_label" {
     when = create
     inline = [
       "#!/bin/bash",
-      "sudo k3s kubectl label nodes ${self.triggers.name} ${self.triggers.label} --overwrite",
+      "sudo /usr/local/bin/k3s kubectl label nodes ${self.triggers.name} ${self.triggers.label} --overwrite",
     ]
   }
 
@@ -215,7 +215,7 @@ resource "null_resource" "k3s_label" {
     when = destroy
     inline = [
       "#!/bin/bash",
-      "sudo k3s kubectl label nodes ${self.triggers.name} ${split("=", self.triggers.label)[0]}-",
+      "sudo /usr/local/bin/k3s kubectl label nodes ${self.triggers.name} ${split("=", self.triggers.label)[0]}-",
     ]
   }
 
@@ -249,14 +249,14 @@ resource "null_resource" "k3s_taint" {
     when = create
     inline = [
       "#!/bin/bash",
-      "sudo k3s kubectl taint nodes ${self.triggers.name} ${self.triggers.taint} --overwrite",
+      "sudo /usr/local/bin/k3s kubectl taint nodes ${self.triggers.name} ${self.triggers.taint} --overwrite",
     ]
   }
 
   provisioner "remote-exec" {
     when = destroy
     inline = [
-      "sudo k3s kubectl taint nodes ${self.triggers.name} ${split("=", self.triggers.taint)[0]}-",
+      "sudo /usr/local/bin/k3s kubectl taint nodes ${self.triggers.name} ${split("=", self.triggers.taint)[0]}-",
     ]
   }
 
