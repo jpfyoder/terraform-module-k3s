@@ -78,7 +78,7 @@ No modules.
 | <a name="input_nodes"></a> [nodes](#input\_nodes) | Map of k3s nodes to create. | <pre>map(object({<br>    # Required<br>    role = string<br>    host = string<br>    user = string<br>    # Optional<br>    internal_address     = optional(string, null)<br>    k3s_version          = optional(string, null)<br>    labels               = optional(list(string), [])<br>    taints               = optional(list(string), [])<br>    uninstall_on_destroy = optional(bool, null)<br>    additional_k3s_args  = optional(list(string), [])<br>  }))</pre> | `{}` | no |
 | <a name="input_ssh_private_key"></a> [ssh\_private\_key](#input\_ssh\_private\_key) | SSH private key to use for connecting to nodes. | `string` | `null` | no |
 | <a name="input_taints"></a> [taints](#input\_taints) | Default taints to apply to all nodes. | `list(string)` | `[]` | no |
-| <a name="input_uninstall_on_destroy"></a> [uninstall\_on\_destroy](#input\_uninstall\_on\_destroy) | Uninstall k3s on nodes when the Terraform resources are destroyed. | `bool` | `true` | no |
+| <a name="input_uninstall_on_destroy"></a> [uninstall\_on\_destroy](#input\_uninstall\_on\_destroy) | Uninstall k3s on nodes when the Terraform resources are destroyed. Useful for more ephemeral environments, disabled by default. | `bool` | `false` | no |
 
 ## Outputs
 

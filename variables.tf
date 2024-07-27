@@ -49,8 +49,8 @@ variable "taints" {
 
 variable "uninstall_on_destroy" {
   type        = bool
-  default     = true
-  description = "Uninstall k3s on nodes when the Terraform resources are destroyed."
+  default     = false
+  description = "Uninstall k3s on nodes when the Terraform resources are destroyed. Useful for more ephemeral environments, disabled by default."
 }
 
 variable "additional_k3s_args" {
