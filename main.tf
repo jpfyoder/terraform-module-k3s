@@ -120,6 +120,7 @@ resource "null_resource" "k3s_key_distribution" {
       "chmod 400 k3s.pem",
       "sudo scp -i k3s.pem -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /var/lib/rancher/k3s/server/token ${self.triggers.node_user}@${self.triggers.node_host}:~/token",
       "ssh -i k3s.pem -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${self.triggers.node_user}@${self.triggers.node_host} 'sudo mkdir -p /var/lib/rancher/k3s/server && sudo mv ~/token /var/lib/rancher/k3s/server/token'",
+      "rm -f ~/token",
       "rm -f k3s.pem",
     ]
   }
