@@ -2,9 +2,6 @@
 ![terraform test](https://github.com/jpfyoder/terraform-module-k3s/actions/workflows/terraform_test.yaml/badge.svg)
 ![tofu test](https://github.com/jpfyoder/terraform-module-k3s/actions/workflows/tofu_test.yaml/badge.svg)
 
-> [!WARNING]
-> Project is still under development. Please use at your own risk, and as always pin versions!
-
 Automate provisioning and maintenance of [k3s](https://k3s.io/) clusters via terraform.
 
 ## Usage
@@ -33,10 +30,11 @@ To connect to the cluster, you must retrieve the Kubeconfig via connecting to a 
 
 ## Things that are Not Implemented
 
-- Automatic getting of Kubeconfig file from the created cluster
+- Support distinct options for all k3s parameters
 - Better key distribution, and providing k3s keys as outputs
-- Support cluster certificate rotation
-- Re-implement as a regular provider to provide better support for all features without odd workarounds
+- Support various cluster maintenance tasks
+
+Feel free to open an issue or otherwise contact me for suggestions!
 
 # Terraform Docs
 
@@ -47,12 +45,14 @@ To connect to the cluster, you must retrieve the Kubeconfig via connecting to a 
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
 | <a name="requirement_null"></a> [null](#requirement\_null) | >= 3.0.0 |
+| <a name="requirement_remote"></a> [remote](#requirement\_remote) | >= 0.1.3 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_null"></a> [null](#provider\_null) | 3.2.2 |
+| <a name="provider_remote"></a> [remote](#provider\_remote) | 0.1.3 |
 
 ## Modules
 
@@ -67,6 +67,7 @@ No modules.
 | [null_resource.k3s_label](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.k3s_node](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [null_resource.k3s_taint](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [remote_file.kubeconfig](https://registry.terraform.io/providers/tenstad/remote/latest/docs/data-sources/file) | data source |
 
 ## Inputs
 
@@ -86,5 +87,11 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_client_certificate"></a> [client\_certificate](#output\_client\_certificate) | Client certificate for authenticating to the cluster |
+| <a name="output_client_key"></a> [client\_key](#output\_client\_key) | Client key for authenticating to the cluster |
+| <a name="output_cluster_ca_certificate"></a> [cluster\_ca\_certificate](#output\_cluster\_ca\_certificate) | CA certificate for authenticating to the cluster |
+| <a name="output_kubeconfig_yaml"></a> [kubeconfig\_yaml](#output\_kubeconfig\_yaml) | Kubeconfig in YAML format |
+| <a name="output_kubernetes_api_server_url"></a> [kubernetes\_api\_server\_url](#output\_kubernetes\_api\_server\_url) | Kubernetes API server URL for the cluster, including the port |
 <!-- END_TF_DOCS -->
