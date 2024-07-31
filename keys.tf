@@ -63,4 +63,6 @@ data "remote_file" "kubeconfig" {
   }
 
   path = "/etc/rancher/k3s/k3s.yaml"
+
+  depends_on = [null_resource.k3s_bootstrap_server]
 }
