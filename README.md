@@ -2,6 +2,9 @@
 ![terraform test](https://github.com/jpfyoder/terraform-module-k3s/actions/workflows/terraform_test.yaml/badge.svg)
 ![tofu test](https://github.com/jpfyoder/terraform-module-k3s/actions/workflows/tofu_test.yaml/badge.svg)
 
+> [!WARNING]
+> Project is still under development. Please use at your own risk, and as always pin versions!
+
 Automate provisioning and maintenance of [k3s](https://k3s.io/) clusters via terraform.
 
 ## Usage
@@ -33,6 +36,7 @@ To connect to the cluster, you must retrieve the Kubeconfig via connecting to a 
 - Automatic getting of Kubeconfig file from the created cluster
 - Better key distribution, and providing k3s keys as outputs
 - Support cluster certificate rotation
+- Re-implement as a regular provider to provide better support for all features without odd workarounds
 
 # Terraform Docs
 
